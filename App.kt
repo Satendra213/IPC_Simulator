@@ -110,11 +110,7 @@ fun App(){
                     }
                 }
 
-                AnimatedVisibility(
-                    visible =curr_scn != null,
-                    enter= expandVertically() + fadeIn(),
-                    exit= shrinkVertically() + fadeOut()
-                ) {
+               
                     Row(
                         modifier= Modifier.fillMaxWidth().padding(bottom = 12.dp),
                         horizontalArrangement= Arrangement.spacedBy(12.dp)
@@ -173,7 +169,19 @@ fun App(){
 
                         }
                     }
-                }
+
+
+
+
+
+
+
+
+
+
+
+
+                
 
                 Row(
                     modifier =Modifier.fillMaxWidth().weight(1f),
@@ -217,6 +225,16 @@ fun App(){
                                             verticalAlignment= Alignment.CenterVertically,
                                             modifier =Modifier.background(Color(0xFF1E293B), RoundedCornerShape(6.dp)).padding(horizontal = 8.dp, vertical = 4.dp)
                                         ) {
+
+
+
+
+
+
+
+
+
+                                            
                                             PulsingDot()
                                             Spacer(modifier= Modifier.width(6.dp))
                                             Text(
@@ -297,6 +315,13 @@ fun App(){
                         backgroundColor =Color(0xFF1E293B).copy(alpha = 0.7f),
                         elevation =0.dp
                     ) {
+
+
+
+
+
+
+                        
                         Column(modifier =Modifier.padding(16.dp).fillMaxSize()) {
                             Row(verticalAlignment =Alignment.CenterVertically, modifier = Modifier.padding(bottom = 12.dp)) {
                                 Text("🧠", fontSize = 18.sp, modifier = Modifier.padding(end = 8.dp))
@@ -344,12 +369,23 @@ fun App(){
                                 )
                             }
                         }
+
+
+
+
+
+                        
                     }
                 }
             }
         }
     }
 }
+
+
+
+
+
 
 @Composable
 fun MonitorItem(label: String, value: String, valueColor: Color) {
@@ -369,12 +405,19 @@ fun getStatusColor(status: String): Color {
         status== "DEADLOCKED"-> Color(0xFFEF4444)
         else-> Color(0xFF38BDF8) 
     }
+
+
+    
 }
 
 @Composable
 fun ScenarioButton(text: String, color: Color, isActive: Boolean, onClick: () -> Unit) {
     val iSrc =remember { MutableInteractionSource() }
+
+    
     val isPrsd by iSrc.collectIsPressedAsState()
+
+    
 
 
     val sclVal by animateFloatAsState(
@@ -408,6 +451,10 @@ fun ScenarioButton(text: String, color: Color, isActive: Boolean, onClick: () ->
             letterSpacing= 0.5.sp
         )
     }
+
+
+
+    
 }
 
 @Composable
@@ -417,6 +464,9 @@ fun PulsingDot() {
     val a_val by inf_T.animateFloat(
         initialValue= 0.3f,
         targetValue= 1f,
+
+
+        
         animationSpec= infiniteRepeatable(
             animation= tween(800, easing = FastOutSlowInEasing),
             repeatMode= RepeatMode.Reverse
