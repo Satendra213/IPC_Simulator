@@ -55,8 +55,10 @@ fun App(){
                 modifier =Modifier.fillMaxSize().padding(16.dp),
                 horizontalAlignment= Alignment.CenterHorizontally
             ) {
+
+                
                 Text(
-                    text= "IPC Debugging Simulator",
+                    text= "IPC Debuger ",
                     fontSize= 28.sp,
                     fontWeight= FontWeight.ExtraBold,
                     color= Color.White,
@@ -73,7 +75,7 @@ fun App(){
                 )
 
                 Card(
-                    modifier= Modifier.fillMaxWidth().padding(bottom = 12.dp).shadow(8.dp, RoundedCornerShape(12.dp)),
+                    modifier= Modifier.fillMaxWidth().padding(bottom = 12.dp).shadow(8.dp, RoundedCornerShape(12.dp)).shadow(8.dp),
                     shape= RoundedCornerShape(12.dp),
 
                     backgroundColor= Color(0xFF1E293B).copy(alpha = 0.7f),
@@ -96,19 +98,20 @@ fun App(){
                         ScenarioButton("Pipe Bottleneck", Color(0xFFF59E0B), curr_scn =="Pipe Bottleneck") {
                             curr_scn= "Pipe Bottleneck"
 
+
+                            
                             c_Scope.launch { ProcessSimulator.runPipeBottleneckScenario() }
                         }
                         ScenarioButton("Message Queue", Color(0xFF3B82F6), curr_scn== "Message Queue") {
                             curr_scn ="Message Queue"
                             c_Scope.launch { ProcessSimulator.runMessageQueueScenario() }
                         }
-                        ScenarioButton("Deadlock", Color(0xFF8B5CF6), curr_scn== "Deadlock") {
-                            curr_scn= "Deadlock"
-                            c_Scope.launch { ProcessSimulator.runDeadlockScenario() }
-                        }
+                        
 
                     }
                 }
+
+                
 
                
                     Row(
@@ -121,8 +124,7 @@ fun App(){
 
                             backgroundColor= Color(0xFF0F172A).copy(alpha = 0.8f)
                         ) {
-                            Column(modifier =Modifier.padding(16.dp)) {
-                                Text(
+                             Text(
                                     text ="⚡ SYSTEM STATE",
                                     color= Color(0xFF38BDF8),
                                     fontSize= 12.sp,
@@ -131,6 +133,11 @@ fun App(){
 
                                     modifier= Modifier.padding(bottom = 12.dp)
                                 )
+
+
+                             
+                            Column(modifier =Modifier.padding(16.dp)) {
+                               
                                 Row(modifier =Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                                     Column(modifier= Modifier.weight(1f)) {
                                         MonitorItem("P1 Status", SystemState.p1Status.value, getStatusColor(SystemState.p1Status.value))
@@ -179,6 +186,9 @@ fun App(){
 
 
 
+                    
+
+
 
 
                 
@@ -225,11 +235,6 @@ fun App(){
                                             verticalAlignment= Alignment.CenterVertically,
                                             modifier =Modifier.background(Color(0xFF1E293B), RoundedCornerShape(6.dp)).padding(horizontal = 8.dp, vertical = 4.dp)
                                         ) {
-
-
-
-
-
 
 
 
@@ -285,11 +290,13 @@ fun App(){
                             Divider(color =Color(0xFF1E293B), modifier = Modifier.padding(bottom = 12.dp))
 
                             LazyColumn(modifier =Modifier.fillMaxSize()) {
-                                items(Debugger.logs) { log_line->
+                                items(Debugger.logs) {log_line->
                                     val txt_clr_x= when {
                                         log_line.contains("⚠️")-> Color(0xFFFCA5A5)
                                         log_line.contains("🚀") ->Color(0xFF6EE7B7)
 
+
+                                        
                                         log_line.contains("🔒") || log_line.contains("🔓")-> Color(0xFF7DD3FC)
                                         log_line.contains("✉️") || log_line.contains("📥") ->Color(0xFFC4B5FD)
                                         else-> Color(0xFFE2E8F0)
@@ -331,6 +338,30 @@ fun App(){
                                     fontSize= 16.sp,
                                     fontWeight =FontWeight.Bold
                                 )
+                                Column(modifier = Modifier.padding(horizontal = 8.dp)){
+                                     Text(
+                                    text ="⚡ SYSTEM STATE",
+                                    color= Color(0xFF38BDF8),
+                                    fontSize= 12.sp,
+                                    fontWeight= FontWeight.Bold,
+                                    letterSpacing= 1.sp,
+
+                                    modifier= Modifier.padding(bottom = 12.dp)
+                                    )
+                                    Row(modifier = Modifier.fillMaxSize()){
+                                        Icon(
+                                            imageVector = Icons.default.play,
+                                            desc = "play Icon"
+                                        )
+                                         Text(
+                                            text ="Simulate",
+                                            color= Color(0xFF38BDF8),
+                                            fontSize= 12.sp,
+                                            fontWeight= FontWeight.Bold,
+                                            letterSpacing= 1.sp,
+        
+                                            modifier= Modifier.padding(bottom = 12.dp)
+                                        )
 
                             }
                             Divider(color =Color(0xFF334155), modifier = Modifier.padding(bottom = 12.dp))
@@ -396,19 +427,7 @@ fun MonitorItem(label: String, value: String, valueColor: Color) {
     }
 }
 
-fun getStatusColor(status: String): Color {
-    return when {
-        status== "Idle" ->Color(0xFF64748B)
 
-        status =="Finished" || status.contains("Sending") || status.contains("Processing")-> Color(0xFF10B981)
-        status.contains("Waiting") || status.contains("Blocked") || status.contains("Holding") ->Color(0xFFF59E0B)
-        status== "DEADLOCKED"-> Color(0xFFEF4444)
-        else-> Color(0xFF38BDF8) 
-    }
-
-
-    
-}
 
 @Composable
 fun ScenarioButton(text: String, color: Color, isActive: Boolean, onClick: () -> Unit) {
@@ -452,6 +471,21 @@ fun ScenarioButton(text: String, color: Color, isActive: Boolean, onClick: () ->
         )
     }
 
+
+
+    
+}
+
+
+fun getStatusColor(status: String): Color {
+    return when {
+        status== "Idle" ->Color(0xFF64748B)
+
+        status =="Finished" || status.contains("Sending") || status.contains("Processing")-> Color(0xFF10B981)
+        status.contains("Waiting") || status.contains("Blocked") || status.contains("Holding") ->Color(0xFFF59E0B)
+        status== "DEADLOCKED"-> Color(0xFFEF4444)
+        else-> Color(0xFF38BDF8) 
+    }
 
 
     
