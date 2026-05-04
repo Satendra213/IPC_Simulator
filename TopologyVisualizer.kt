@@ -93,6 +93,8 @@ fun PipeTopology() {
         targetValue= if (SystemState.isPipeBottleneck.value) Color(0xFFEF4444) else Color(0xFF38BDF8)
     )
 
+
+        
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         ProcessNode("Producer\n(${SystemState.p1Status.value})", getStatusColor(SystemState.p1Status.value))
         Text("➡", color= Color.Gray, fontSize = 24.sp)
@@ -100,13 +102,13 @@ fun PipeTopology() {
         Box(
             modifier = Modifier
                 .background(pipeColor.copy(alpha= 0.2f), RoundedCornerShape(8.dp))
-                .border(2.dp, pipeColor, RoundedCornerShape(8.dp))
+                .border(5.dp, pipeColor, RoundedCornerShape(8.dp))
                 .padding(16.dp),
 
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("OS Pipe Buffer", color =Color.White, fontWeight = FontWeight.Bold)
+                Text("OS PIPE BUFFER", color =Color.White, fontWeight = FontWeight.Bold)
                 Text(SystemState.pipeBufferVisual.value, color =pipeColor, fontSize= 20.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 4.sp)
             }
         }
@@ -121,7 +123,11 @@ fun MessageQueueTopology() {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         ProcessNode("Process A\n(${SystemState.p1Status.value})", getStatusColor(SystemState.p1Status.value))
 
-        Text(if (SystemState.isP1Sending.value) "➡ ✉️" else "➡", color = if (SystemState.isP1Sending.value) Color(0xFF10B981) else Color.Gray, fontSize = 24.sp)
+        Text(
+            if (SystemState.isP1Sending.value) "➡ ✉️"
+            else "➡",
+            color = if (SystemState.isP1Sending.value) Color(0xFF10B981)
+            else Color.Gray, fontSize = 24.sp)
         Box(
             modifier = Modifier
                 .background(Color(0xFF8B5CF6).copy(alpha= 0.2f), RoundedCornerShape(8.dp))
@@ -136,8 +142,7 @@ fun MessageQueueTopology() {
             }
         }
 
-        Text(if (SystemState.isP2Receiving.value) "✉️ ➡" else "➡", color= if (SystemState.isP2Receiving.value) Color(0xFF10B981) else Color.Gray, fontSize = 24.sp)
-        ProcessNode("Process B\n(${SystemState.p2Status.value})", getStatusColor(SystemState.p2Status.value))
+       
     }
 }
 
@@ -160,6 +165,9 @@ fun DeadlockTopology() {
         Row(horizontalArrangement = Arrangement.spacedBy(60.dp), verticalAlignment = Alignment.CenterVertically) {
             ResourceNode("Resource B", SystemState.p1ResourceB_Status.value, SystemState.p2ResourceB_Status.value)
             ResourceArrow(SystemState.p2ResourceB_Status.value, "⬅")
+
+
+            
             ProcessNode("Process 2", getStatusColor(SystemState.p2Status.value))
         }
     }
@@ -189,13 +197,24 @@ fun ResourceNode(name: String, p1State: String, p2State: String) {
         else-> Color(0xFF64748B)
 
     }
+    
     Box(
         modifier = Modifier
             .size(100.dp)
             .background(Color(0xFF0F172A), CircleShape)
             .border(2.dp, borderColor, CircleShape),
+        
         contentAlignment = Alignment.Center
     ) {
+        Button(
+            onClick ={
+                onExecuteClick()
+            }
+        ){
+            Text("Execute Process", color =Color.White, fontSize= 12.sp, 
+                 fontWeight = FontWeight.Bold)
+            
+        }
         Text(name, color =Color.White, fontSize= 12.sp, fontWeight = FontWeight.Bold)
     }
 }
